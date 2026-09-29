@@ -13,6 +13,7 @@
       --text-dim: #666666;
       --input-bg: #ffffff;
       --border: #cccccc;
+      --danger: #dc3545;
     }
 
     .theme-dark {
@@ -23,6 +24,7 @@
       --text-dim: #94a3b8;
       --input-bg: rgba(15, 23, 42, 0.5);
       --border: rgba(255, 255, 255, 0.1);
+      --danger: #f87171;
     }
 
     body { 
@@ -34,35 +36,44 @@
       align-items: flex-start;
       min-height: 100vh;
       margin: 0;
-      padding-top: 30px;
+      padding: 30px 0;
       transition: all 0.4s ease;
     }
 
-    .container { position: relative; width: 100%; max-width: 450px; padding: 20px; }
+    .container { position: relative; width: 100%; max-width: 480px; padding: 20px; }
 
     .glass-card {
+      position: relative;
       background: var(--card-bg);
       backdrop-filter: blur(12px);
       border: 1px solid var(--border);
       border-radius: 24px;
       padding: 25px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
     }
 
     .theme-toggle {
       position: absolute;
-      top: -10px;
-      right: 20px;
-      background: var(--accent);
-      color: white;
-      border: none;
-      padding: 8px 15px;
+      top: 18px;
+      right: 18px;
+      background: rgba(56, 189, 248, 0.1);
+      color: var(--accent);
+      border: 1px solid var(--border);
+      padding: 6px 12px;
       border-radius: 20px;
       cursor: pointer;
-      font-size: 0.7rem;
+      font-size: 0.85rem;
       font-weight: bold;
-      z-index: 10;
-      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s;
+    }
+
+    .theme-toggle:hover {
+      background: var(--accent);
+      color: #ffffff;
     }
 
     .location-tag {
@@ -76,9 +87,36 @@
       font-weight: bold;
     }
 
-    h1 { font-size: 1.2rem; text-align: center; margin-bottom: 20px; font-weight: 800; }
+    h1 { font-size: 1.2rem; text-align: center; margin-bottom: 15px; font-weight: 800; padding-right: 40px; }
 
-    .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
+    .mode-tabs {
+      display: flex;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 4px;
+      margin-bottom: 20px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      border: none;
+      background: none;
+      color: var(--text-dim);
+      padding: 8px;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active {
+      background: var(--accent);
+      color: white;
+    }
+
+    .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
     .input-wrapper { text-align: center; }
     label { font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; display: block; margin-bottom: 5px; }
     
@@ -87,20 +125,26 @@
       background: var(--input-bg);
       border: 2px solid var(--accent);
       border-radius: 12px;
-      padding: 12px;
+      padding: 10px;
       color: var(--text-main);
-      font-size: 1.4rem;
+      font-size: 1.2rem;
       font-weight: 700;
       text-align: center;
       box-sizing: border-box;
     }
 
-    input::placeholder {
-      color: var(--text-dim);
-      opacity: 0.5;
-    }
-
+    input::placeholder { color: var(--text-dim); opacity: 0.5; }
     input:focus { outline: none; border-color: var(--accent); }
+
+    .last-reading-box {
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px dashed var(--accent);
+      border-radius: 12px;
+      padding: 10px;
+      margin-bottom: 15px;
+      font-size: 0.8rem;
+      text-align: center;
+    }
 
     h2 { font-size: 0.8rem; text-transform: uppercase; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 5px; margin-top: 15px; }
 
@@ -109,29 +153,101 @@
     .divider { height: 2px; background: var(--accent); opacity: 0.3; margin: 15px 0; }
     
     .total-container { text-align: center; }
-    .total-value { font-size: 2.5rem; font-weight: 800; display: block; margin-top: 5px; }
+    .total-value { font-size: 2.2rem; font-weight: 800; display: block; margin-top: 5px; }
+
+    .btn {
+      width: 100%;
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 0.9rem;
+      margin-top: 15px;
+      transition: opacity 0.2s;
+    }
+    .btn:hover { opacity: 0.9; }
+
+    .history-item {
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+    }
+    .history-info { display: flex; flex-direction: column; gap: 3px; }
+    .history-date { font-size: 0.7rem; color: var(--text-dim); }
+    .delete-btn {
+      background: none;
+      border: none;
+      color: var(--danger);
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 1.1rem;
+      padding: 0 5px;
+    }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <button id="themeBtn" class="theme-toggle" onclick="toggleTheme()">SÖTÉT MÓD</button>
-  
   <div class="glass-card">
+    <button id="themeBtn" class="theme-toggle" onclick="toggleTheme()">🌙</button>
+    
     <div style="text-align: center;"><span class="location-tag">HELYSZÍN: BAJ</span></div>
     <h1>ÁRAM SZÁMLA KALKULÁTOR</h1>
-    
-    <div class="input-grid">
-      <div class="input-wrapper">
-        <label>Normál (A1)</label>
-        <input id="consA" type="number" placeholder="0" inputmode="decimal">
+
+    <!-- MÓDVÁLTÓ TABS -->
+    <div class="mode-tabs">
+      <button id="tabMeters" class="tab-btn active" onclick="switchMode('meters')">ÓRAÁLLÁSOK ALAPJÁN</button>
+      <button id="tabDirect" class="tab-btn" onclick="switchMode('direct')">KÖZVETLEN kWh Megadás</button>
+    </div>
+
+    <!-- MÓD 1: Óraállások megadása -->
+    <div id="sectionMeters">
+      <div class="last-reading-box" id="lastReadingDisplay">
+        Utolsó rögzített állás: <b>Nincs elmentve</b>
       </div>
-      <div class="input-wrapper">
-        <label>Éjszakai (B)</label>
-        <input id="consB" type="number" placeholder="0" inputmode="decimal">
+
+      <h2>Új Óraállás Bevitele</h2>
+      <div class="input-grid">
+        <div class="input-wrapper">
+          <label>Normál (A1) állás</label>
+          <input id="meterA" type="number" placeholder="pl. 39146" inputmode="decimal">
+        </div>
+        <div class="input-wrapper">
+          <label>Éjszakai (B) állás</label>
+          <input id="meterB" type="number" placeholder="pl. 1016" inputmode="decimal">
+        </div>
+      </div>
+
+      <h2>Kiszámolt havi fogyasztás</h2>
+      <div class="stat-row"><span>Normál fogyasztás (A1):</span> <b id="outConsA">0 kWh</b></div>
+      <div class="stat-row"><span>Éjszakai fogyasztás (B):</span> <b id="outConsB">0 kWh</b></div>
+    </div>
+
+    <!-- MÓD 2: Közvetlen kWh megadás (Régi módszer - csak számol, nem ment) -->
+    <div id="sectionDirect" style="display: none;">
+      <h2>Fogyasztás megadása (kWh)</h2>
+      <div class="input-grid">
+        <div class="input-wrapper">
+          <label>Normál (A1)</label>
+          <input id="directA" type="number" placeholder="0" inputmode="decimal">
+        </div>
+        <div class="input-wrapper">
+          <label>Éjszakai (B)</label>
+          <input id="directB" type="number" placeholder="0" inputmode="decimal">
+        </div>
       </div>
     </div>
 
+    <!-- Eredmények kijelzése mindkét módhoz -->
     <h2>Normál elszámolás (A1)</h2>
     <div class="stat-row"><span>Kedvezményes (210 kWh / 36 Ft):</span> <b id="outLowA">0 Ft</b></div>
     <div class="stat-row"><span>Piaci ár felette (70.1 Ft):</span> <b id="outHighA">0 Ft</b></div>
@@ -146,29 +262,93 @@
       <div style="font-size: 0.8rem; color: var(--accent); font-weight: bold;">ÖSSZESEN FIZETENDŐ</div>
       <div id="outTotal" class="total-value">0 Ft</div>
     </div>
+
+    <button id="saveBtn" class="btn" onclick="saveMeasurement()">Mérés mentése az előzményekbe</button>
+  </div>
+
+  <div class="glass-card">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <h2 style="margin: 0; border: none;">Előzmények</h2>
+      <button style="background: none; border: none; color: var(--danger); cursor: pointer; font-size: 0.75rem;" onclick="clearAllHistory()">Összes törlése</button>
+    </div>
+    <div id="historyList" style="margin-top: 15px;">
+      <!-- Mentett bejegyzések helye -->
+    </div>
   </div>
 </div>
 
 <script>
-  const inputA = document.getElementById('consA');
-  const inputB = document.getElementById('consB');
+  let currentMode = 'meters';
+
+  const meterA = document.getElementById('meterA');
+  const meterB = document.getElementById('meterB');
+  const directA = document.getElementById('directA');
+  const directB = document.getElementById('directB');
   const themeBtn = document.getElementById('themeBtn');
+  const saveBtn = document.getElementById('saveBtn');
 
   function toggleTheme() {
     const isDark = document.body.classList.toggle('theme-dark');
-    themeBtn.textContent = isDark ? 'VILÁGOS MÓD' : 'SÖTÉT MÓD';
+    themeBtn.textContent = isDark ? '☀️' : '🌙';
+  }
+
+  function switchMode(mode) {
+    currentMode = mode;
+    document.getElementById('tabMeters').classList.toggle('active', mode === 'meters');
+    document.getElementById('tabDirect').classList.toggle('active', mode === 'direct');
+    
+    document.getElementById('sectionMeters').style.display = mode === 'meters' ? 'block' : 'none';
+    document.getElementById('sectionDirect').style.display = mode === 'direct' ? 'block' : 'none';
+    
+    // Mentés gomb elrejtése közvetlen mód esetén
+    saveBtn.style.display = mode === 'meters' ? 'block' : 'none';
+
+    calculate();
+  }
+
+  function getLastReading() {
+    const history = JSON.parse(localStorage.getItem('electricity_history') || '[]');
+    return history.find(item => item.meterA !== undefined && item.meterA !== null) || null;
+  }
+
+  function updateLastReadingUI() {
+    const last = getLastReading();
+    const display = document.getElementById('lastReadingDisplay');
+    if (last) {
+      display.innerHTML = `Utolsó rögzített állás (${last.date}):<br><b>A1: ${last.meterA} kWh | B: ${last.meterB} kWh</b>`;
+    } else {
+      display.innerHTML = 'Utolsó rögzített állás: <b>Nincs még elmentve (Kezdő mérés)</b>';
+    }
   }
 
   function calculate() {
-    const valA = parseFloat(inputA.value) || 0;
-    const valB = parseFloat(inputB.value) || 0;
+    let consA = 0;
+    let consB = 0;
+
+    if (currentMode === 'meters') {
+      const currentA = parseFloat(meterA.value);
+      const currentB = parseFloat(meterB.value);
+      const last = getLastReading();
+
+      if (last) {
+        if (!isNaN(currentA) && currentA >= last.meterA) consA = currentA - last.meterA;
+        if (!isNaN(currentB) && currentB >= last.meterB) consB = currentB - last.meterB;
+      }
+
+      document.getElementById('outConsA').textContent = consA + ' kWh';
+      document.getElementById('outConsB').textContent = consB + ' kWh';
+    } else {
+      consA = parseFloat(directA.value) || 0;
+      consB = parseFloat(directB.value) || 0;
+    }
+
     const limit = 210;
     
-    const lowA = Math.min(valA, limit) * 36;
-    const highA = Math.max(0, valA - limit) * 70.1;
+    const lowA = Math.min(consA, limit) * 36;
+    const highA = Math.max(0, consA - limit) * 70.1;
     
-    const lowB = Math.min(valB, limit) * 23.1;
-    const highB = Math.max(0, valB - limit) * 60.9;
+    const lowB = Math.min(consB, limit) * 23.1;
+    const highB = Math.max(0, consB - limit) * 60.9;
     
     const total = Math.round(lowA + highA + lowB + highB);
 
@@ -179,10 +359,100 @@
     document.getElementById('outTotal').textContent = total.toLocaleString('hu-HU') + ' Ft';
   }
 
-  [inputA, inputB].forEach(input => {
+  function saveMeasurement() {
+    if (currentMode !== 'meters') return;
+
+    const valA = parseFloat(meterA.value);
+    const valB = parseFloat(meterB.value);
+
+    if (isNaN(valA) && isNaN(valB)) {
+      alert('Kérjük, adj meg legalább egy óraállást!');
+      return;
+    }
+
+    const last = getLastReading();
+    let consA = 0;
+    let consB = 0;
+
+    if (last) {
+      if (!isNaN(valA)) consA = Math.max(0, valA - last.meterA);
+      if (!isNaN(valB)) consB = Math.max(0, valB - last.meterB);
+    }
+
+    const totalText = document.getElementById('outTotal').textContent;
+    const dateStr = new Date().toLocaleDateString('hu-HU', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+
+    const entry = {
+      id: Date.now(),
+      date: dateStr,
+      meterA: !isNaN(valA) ? valA : (last ? last.meterA : 0),
+      meterB: !isNaN(valB) ? valB : (last ? last.meterB : 0),
+      consA: consA,
+      consB: consB,
+      total: totalText,
+      isInitial: !last
+    };
+
+    const history = JSON.parse(localStorage.getItem('electricity_history') || '[]');
+    history.unshift(entry);
+    localStorage.setItem('electricity_history', JSON.stringify(history));
+
+    meterA.value = '';
+    meterB.value = '';
+
+    updateLastReadingUI();
+    renderHistory();
+    calculate();
+  }
+
+  function deleteHistoryItem(id) {
+    let history = JSON.parse(localStorage.getItem('electricity_history') || '[]');
+    history = history.filter(item => item.id !== id);
+    localStorage.setItem('electricity_history', JSON.stringify(history));
+    updateLastReadingUI();
+    renderHistory();
+    calculate();
+  }
+
+  function clearAllHistory() {
+    if (confirm('Biztosan törölni szeretnéd az összes elmentett előzményt?')) {
+      localStorage.removeItem('electricity_history');
+      updateLastReadingUI();
+      renderHistory();
+      calculate();
+    }
+  }
+
+  function renderHistory() {
+    const history = JSON.parse(localStorage.getItem('electricity_history') || '[]');
+    const listEl = document.getElementById('historyList');
+    
+    if (history.length === 0) {
+      listEl.innerHTML = '<div style="text-align: center; color: var(--text-dim); font-size: 0.8rem;">Nincs elmentett előzmény</div>';
+      return;
+    }
+
+    listEl.innerHTML = history.map(item => `
+      <div class="history-item">
+        <div class="history-info">
+          <span class="history-date">${item.date} ${item.isInitial ? '(Kezdő állás)' : ''}</span>
+          <div><b>${item.isInitial ? 'Kezdő rögzítés' : item.total}</b></div>
+          <div style="font-size:0.75rem; color:var(--text-dim)">
+            Óraállás: A1: ${item.meterA} | B: ${item.meterB}<br>
+            ${!item.isInitial ? `Fogyasztás: A1: ${item.consA} kWh \vert{} B:${item.consB} kWh` : ''}
+          </div>
+        </div>
+        <button class="delete-btn" onclick="deleteHistoryItem(${item.id})">✕</button>
+      </div>
+    `).join('');
+  }
+
+  [meterA, meterB, directA, directB].forEach(input => {
     input.addEventListener('input', calculate);
   });
 
+  updateLastReadingUI();
+  renderHistory();
   calculate();
 </script>
 
