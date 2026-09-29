@@ -232,7 +232,7 @@
       <div class="stat-row"><span>Éjszakai fogyasztás (B):</span> <b id="outConsB">0 kWh</b></div>
     </div>
 
-    <!-- MÓD 2: Közvetlen kWh megadás (Régi módszer - csak számol, nem ment) -->
+    <!-- MÓD 2: Közvetlen kWh megadás -->
     <div id="sectionDirect" style="display: none;">
       <h2>Fogyasztás megadása (kWh)</h2>
       <div class="input-grid">
@@ -247,7 +247,7 @@
       </div>
     </div>
 
-    <!-- Eredmények kijelzése mindkét módhoz -->
+    <!-- Eredmények kijelzése -->
     <h2>Normál elszámolás (A1)</h2>
     <div class="stat-row"><span>Kedvezményes (210 kWh / 36 Ft):</span> <b id="outLowA">0 Ft</b></div>
     <div class="stat-row"><span>Piaci ár felette (70.1 Ft):</span> <b id="outHighA">0 Ft</b></div>
@@ -300,7 +300,6 @@
     document.getElementById('sectionMeters').style.display = mode === 'meters' ? 'block' : 'none';
     document.getElementById('sectionDirect').style.display = mode === 'direct' ? 'block' : 'none';
     
-    // Mentés gomb elrejtése közvetlen mód esetén
     saveBtn.style.display = mode === 'meters' ? 'block' : 'none';
 
     calculate();
