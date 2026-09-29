@@ -53,6 +53,7 @@
       margin-bottom: 20px;
     }
 
+    /* Téma gomb a JOBB felső sarokban */
     .theme-toggle {
       position: absolute;
       top: 18px;
@@ -67,13 +68,34 @@
       font-weight: bold;
       display: flex;
       align-items: center;
-      gap: 5px;
+      justify-content: center;
       transition: all 0.2s;
+      height: 28px;
+      box-sizing: border-box;
     }
 
     .theme-toggle:hover {
       background: var(--accent);
       color: #ffffff;
+    }
+
+    /* Verzió gomb/jelvény a BAL felső sarokban (pontosan egy magasságban a téma gombbal) */
+    .version-tag-top {
+      position: absolute;
+      top: 18px;
+      left: 18px;
+      font-size: 0.75rem;
+      background: rgba(56, 189, 248, 0.1);
+      color: var(--accent);
+      border: 1px solid var(--border);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 28px;
+      box-sizing: border-box;
     }
 
     .location-tag {
@@ -87,7 +109,7 @@
       font-weight: bold;
     }
 
-    h1 { font-size: 1.2rem; text-align: center; margin-bottom: 15px; font-weight: 800; padding-right: 40px; }
+    h1 { font-size: 1.2rem; text-align: center; margin-bottom: 15px; font-weight: 800; }
 
     .mode-tabs {
       display: flex;
@@ -198,9 +220,16 @@
 
 <div class="container">
   <div class="glass-card">
+    <!-- Bal sarokban a Verzió gomb -->
+    <div class="version-tag-top">v1.0.2</div>
+    
+    <!-- Jobb sarokban a Téma kapcsoló -->
     <button id="themeBtn" class="theme-toggle" onclick="toggleTheme()">🌙</button>
     
-    <div style="text-align: center;"><span class="location-tag">HELYSZÍN: BAJ</span></div>
+    <div style="text-align: center;">
+      <span class="location-tag">HELYSZÍN: BAJ</span>
+    </div>
+    
     <h1>ÁRAM SZÁMLA KALKULÁTOR</h1>
 
     <!-- MÓDVÁLTÓ TABS -->
@@ -431,19 +460,25 @@
       return;
     }
 
-    listEl.innerHTML = history.map(item => `
-      <div class="history-item">
-        <div class="history-info">
-          <span class="history-date">${item.date} ${item.isInitial ? '(Kezdő állás)' : ''}</span>
-          <div><b>${item.isInitial ? 'Kezdő rögzítés' : item.total}</b></div>
-          <div style="font-size:0.75rem; color:var(--text-dim)">
-            Óraállás: A1: ${item.meterA} | B: ${item.meterB}<br>
-            ${!item.isInitial ? `Fogyasztás: A1: ${item.consA} kWh \vert{} B:${item.consB} kWh` : ''}
+    listEl.innerHTML = history.map(item => {
+      const details = item.isInitial 
+        ? '' 
+        : `Fogyasztás: A1: ${item.consA} kWh | B: ${item.consB} kWh`;
+
+      return `
+        <div class="history-item">
+          <div class="history-info">
+            <span class="history-date">${item.date} ${item.isInitial ? '(Kezdő állás)' : ''}</span>
+            <div><b>${item.isInitial ? 'Kezdő rögzítés' : item.total}</b></div>
+            <div style="font-size:0.75rem; color:var(--text-dim)">
+              Óraállás: A1: ${item.meterA} | B: ${item.meterB}
+              ${details ? `<br>${details}` : ''}
+            </div>
           </div>
+          <button class="delete-btn" onclick="deleteHistoryItem(${item.id})">✕</button>
         </div>
-        <button class="delete-btn" onclick="deleteHistoryItem(${item.id})">✕</button>
-      </div>
-    `).join('');
+      `;
+    }).join('');
   }
 
   [meterA, meterB, directA, directB].forEach(input => {
